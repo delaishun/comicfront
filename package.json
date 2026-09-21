@@ -1,0 +1,22 @@
+{
+  "name": "comic",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@vant/nuxt": "^1.0.7",
+    "nuxt": "^4.5.2",
+    "vant": "^4.10.2",
+    "vue": "^3.5.42",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "less": "^4.9.1"
+  }
+}

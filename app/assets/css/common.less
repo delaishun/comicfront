@@ -1,0 +1,895 @@
+// ============================================================
+// assets/css/common.less
+// 漫画 / 插画平台通用样式 —— 主题：纸间墨（Paper & Ink）
+// 用法：在每个页面的 <style lang="less"> 顶部
+//       @import "~/assets/css/common.less";
+// ============================================================
+
+// ------------------------------------------------------------
+// 1. 设计变量（Token）
+// ------------------------------------------------------------
+
+// 颜色 · 背景
+@paper: #F5F3EF; // 页面底色：暖纸白
+@surface: #FFFFFF; // 卡片 / 弹层
+@surface-2: #FAF8F4; // 次级面板（hover / 内嵌区）
+
+// 颜色 · 文字
+@ink-1: #1A1A1A; // 主文字：墨黑
+@ink-2: #5C5C5C; // 副文字
+@ink-3: #9E9E9E; // 弱化文字 / placeholder
+
+// 颜色 · 边框
+@border: #E5E2DB;
+@border-strong: #D4D0C7;
+
+// 颜色 · 强调
+@accent: #D93D3D; // 朱红
+@accent-hover: #B32E2E;
+@accent-soft: #FBE9E9; // 强调浅底
+@link: #2B5B8E; // 链接蓝
+
+// 颜色 · 状态
+@success: #2E7D5B;
+@warning: #C98A1B;
+@danger: #C0392B;
+
+// 字体
+@font-sans: "Inter", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+@font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", Georgia, "Times New Roman", serif;
+@font-mono: "JetBrains Mono", "Roboto Mono", ui-monospace, Menlo, Consolas, monospace;
+
+// 字号
+@fs-xs: 12px;
+@fs-sm: 13px;
+@fs-base: 15px;
+@fs-md: 17px;
+@fs-lg: 20px;
+@fs-xl: 26px;
+@fs-2xl: 34px;
+
+// 行高
+@lh-tight: 1.25;
+@lh-base: 1.6;
+@lh-loose: 1.85;
+
+// 间距（4px 基准）
+@sp-1: 4px;
+@sp-2: 8px;
+@sp-3: 12px;
+@sp-4: 16px;
+@sp-5: 24px;
+@sp-6: 32px;
+@sp-7: 48px;
+@sp-8: 64px;
+
+// 圆角
+@radius-sm: 3px;
+@radius: 6px;
+@radius-lg: 10px;
+@radius-pill: 999px;
+
+// 阴影
+@shadow-1: 0 1px 2px rgba(0, 0, 0, .04);
+@shadow-2: 0 4px 12px rgba(0, 0, 0, .06);
+@shadow-3: 0 8px 28px rgba(0, 0, 0, .10);
+
+// 布局
+@content-max: 1120px;
+@content-pad: 20px;
+
+// 断点
+@bp-sm: 640px;
+@bp-md: 768px;
+@bp-lg: 1024px;
+@bp-xl: 1280px;
+
+// ------------------------------------------------------------
+// 2. 运行时 CSS 变量（方便在 vue 里动态用 var(--accent)）
+// ------------------------------------------------------------
+:root {
+  --paper: @paper;
+  --surface: @surface;
+  --surface-2: @surface-2;
+  --ink-1: @ink-1;
+  --ink-2: @ink-2;
+  --ink-3: @ink-3;
+  --border: @border;
+  --border-strong: @border-strong;
+  --accent: @accent;
+  --accent-hover: @accent-hover;
+  --accent-soft: @accent-soft;
+  --link: @link;
+  --radius: @radius;
+  --radius-lg: @radius-lg;
+  --shadow-1: @shadow-1;
+  --shadow-2: @shadow-2;
+  --shadow-3: @shadow-3;
+  --font-sans: @font-sans;
+  --font-serif: @font-serif;
+  --font-mono: @font-mono;
+
+  /* ---- Vant 主题变量映射 ---- */
+  // 主色（primary 按钮、选中态、loading 等）
+  --van-primary-color: @accent;
+
+  // 背景
+  --van-background: @paper; // 页面底色
+  --van-background-2: @surface; // 卡片、cell 底色
+  --van-background-3: @surface-2;
+
+  // 文字
+  --van-text-color: @ink-1; // 主文字
+  --van-text-color-2: @ink-2; // 副文字
+  --van-text-color-3: @ink-3; // 弱化文字
+
+  // 边框
+  --van-border-color: @border;
+  --van-active-color: @surface-2; // 点击时的背景反馈
+
+  // 圆角
+  --van-radius-sm: @radius-sm;
+  --van-radius-md: @radius;
+  --van-radius-lg: @radius-lg;
+  --van-button-normal-radius: @radius;
+
+  // 字体
+  --van-base-font: @font-sans;
+}
+
+// ------------------------------------------------------------
+// 3. 全局重置
+// ------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background-color: @paper;
+  color: @ink-1;
+  font-family: @font-sans;
+  font-size: @fs-base;
+  line-height: @lh-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+// ------------------------------------------------------------
+// 4. 排版
+// ------------------------------------------------------------
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 @sp-4;
+  color: @ink-1;
+  font-weight: 600;
+  line-height: @lh-tight;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-family: @font-serif;
+  font-size: @fs-2xl;
+  font-weight: 700;
+}
+
+h2 {
+  font-family: @font-serif;
+  font-size: @fs-xl;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: @fs-lg;
+}
+
+h4 {
+  font-size: @fs-md;
+}
+
+p {
+  margin: 0 0 @sp-4;
+  color: @ink-2;
+  line-height: @lh-base;
+}
+
+a {
+  color: @link;
+  text-decoration: none;
+  transition: color .15s ease;
+
+  &:hover {
+    color: @accent;
+  }
+}
+
+.text-muted {
+  color: @ink-2;
+}
+
+.text-dim {
+  color: @ink-3;
+}
+
+.text-accent {
+  color: @accent;
+}
+
+.mono {
+  font-family: @font-mono;
+}
+
+.serif {
+  font-family: @font-serif;
+}
+
+// ------------------------------------------------------------
+// 5. 页面骨架
+// ------------------------------------------------------------
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: @content-max;
+  margin: 0 auto;
+  padding: 0 @content-pad;
+
+  @media (max-width: @bp-sm) {
+    padding: 0 @sp-4;
+  }
+}
+
+.container--narrow {
+  max-width: 720px;
+}
+
+.section {
+  padding: @sp-6 0;
+
+  @media (max-width: @bp-sm) {
+    padding: @sp-5 0;
+  }
+}
+
+// 章节标题：左侧竖线 + 衬线体
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: @sp-4;
+  padding-bottom: @sp-3;
+  border-bottom: 1px solid @border;
+
+  &__main {
+    position: relative;
+    padding-left: @sp-3;
+    font-family: @font-serif;
+    font-size: @fs-lg;
+    font-weight: 700;
+    color: @ink-1;
+    line-height: 1.2;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      bottom: 4px;
+      width: 3px;
+      background: @accent;
+      border-radius: 2px;
+    }
+  }
+
+  &__more {
+    font-size: @fs-sm;
+    color: @ink-3;
+
+    &:hover {
+      color: @accent;
+    }
+  }
+}
+
+// ------------------------------------------------------------
+// 6. 按钮
+// ------------------------------------------------------------
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: @sp-2;
+  padding: 9px 18px;
+  font-family: @font-sans;
+  font-size: @fs-sm;
+  font-weight: 500;
+  line-height: 1.2;
+  color: @ink-1;
+  background: @surface;
+  border: 1px solid @border-strong;
+  border-radius: @radius;
+  cursor: pointer;
+  transition: all .15s ease;
+  user-select: none;
+
+  &:hover {
+    border-color: @ink-2;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:disabled,
+  &.is-disabled {
+    color: @ink-3;
+    background: @surface-2;
+    border-color: @border;
+    cursor: not-allowed;
+  }
+
+  // 主按钮
+  &--primary {
+    color: #fff;
+    background: @accent;
+    border-color: @accent;
+
+    &:hover {
+      background: @accent-hover;
+      border-color: @accent-hover;
+    }
+
+    &:disabled {
+      color: #fff;
+      background: #d9b3b3;
+      border-color: #d9b3b3;
+    }
+  }
+
+  // 幽灵按钮
+  &--ghost {
+    color: @ink-2;
+    background: transparent;
+    border-color: transparent;
+
+    &:hover {
+      color: @ink-1;
+      background: @surface-2;
+    }
+  }
+
+  // 尺寸
+  &--sm {
+    padding: 6px 12px;
+    font-size: @fs-xs;
+  }
+
+  &--lg {
+    padding: 12px 24px;
+    font-size: @fs-base;
+  }
+
+  &--block {
+    width: 100%;
+  }
+}
+
+// ------------------------------------------------------------
+// 7. 表单
+// ------------------------------------------------------------
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: @sp-2;
+  margin-bottom: @sp-4;
+
+  &__label {
+    font-size: @fs-sm;
+    font-weight: 500;
+    color: @ink-2;
+  }
+
+  &__hint {
+    font-size: @fs-xs;
+    color: @ink-3;
+  }
+
+  &__error {
+    font-size: @fs-xs;
+    color: @danger;
+  }
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: @font-sans;
+  font-size: @fs-base;
+  color: @ink-1;
+  background: @surface;
+  border: 1px solid @border-strong;
+  border-radius: @radius;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+
+  &::placeholder {
+    color: @ink-3;
+  }
+
+  &:focus {
+    border-color: @accent;
+    box-shadow: 0 0 0 3px @accent-soft;
+  }
+
+  &:disabled {
+    background: @surface-2;
+    color: @ink-3;
+  }
+}
+
+.textarea {
+  min-height: 96px;
+  resize: vertical;
+  line-height: @lh-base;
+}
+
+// ------------------------------------------------------------
+// 8. 卡片
+// ------------------------------------------------------------
+.card {
+  background: @surface;
+  border: 1px solid @border;
+  border-radius: @radius-lg;
+  overflow: hidden;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+
+  &--hoverable {
+    cursor: pointer;
+
+    &:hover {
+      border-color: @border-strong;
+      box-shadow: @shadow-2;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__body {
+    padding: @sp-4;
+  }
+}
+
+// ------------------------------------------------------------
+// 9. 画册网格 & 卡片
+// ------------------------------------------------------------
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: @sp-5 @sp-4;
+
+  @media (max-width: @bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: @sp-4 @sp-3;
+  }
+}
+
+.album-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+
+  &__cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4; // 画册常用竖版封面比例
+    background: @surface-2;
+    border-radius: @radius;
+    overflow: hidden;
+    box-shadow: @shadow-1;
+    transition: box-shadow .2s ease, transform .2s ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &:hover &__cover {
+    box-shadow: @shadow-2;
+    transform: translateY(-2px);
+  }
+
+  // 右上角计数徽标
+  &__badge {
+    position: absolute;
+    top: @sp-2;
+    right: @sp-2;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: @font-mono;
+    color: #fff;
+    background: rgba(0, 0, 0, .55);
+    border-radius: @radius-sm;
+    backdrop-filter: blur(4px);
+  }
+
+  &__title {
+    margin-top: @sp-2;
+    font-size: @fs-sm;
+    font-weight: 500;
+    color: @ink-1;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__meta {
+    margin-top: 2px;
+    font-size: @fs-xs;
+    color: @ink-3;
+  }
+}
+
+// ------------------------------------------------------------
+// 10. 插画瀑布流
+// ------------------------------------------------------------
+.image-grid {
+  column-count: 4;
+  column-gap: @sp-3;
+
+  @media (max-width: @bp-lg) {
+    column-count: 3;
+  }
+
+  @media (max-width: @bp-md) {
+    column-count: 2;
+  }
+
+  @media (max-width: @bp-sm) {
+    column-count: 2;
+    column-gap: @sp-2;
+  }
+}
+
+.image-card {
+  break-inside: avoid;
+  margin-bottom: @sp-3;
+  background: @surface-2;
+  border-radius: @radius;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: @shadow-1;
+  transition: box-shadow .2s ease;
+
+  &:hover {
+    box-shadow: @shadow-2;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+// ------------------------------------------------------------
+// 11. 作者网格
+// ------------------------------------------------------------
+.author-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: @sp-4;
+
+  @media (max-width: @bp-sm) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: @sp-3;
+  }
+}
+
+.author-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: @sp-4 @sp-2;
+  text-align: center;
+  color: inherit;
+  text-decoration: none;
+  border-radius: @radius-lg;
+  transition: background .15s ease;
+
+  &:hover {
+    background: @surface-2;
+  }
+
+  &__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: @surface-2;
+    border: 1px solid @border;
+  }
+
+  &__name {
+    margin-top: @sp-2;
+    font-size: @fs-sm;
+    font-weight: 500;
+    color: @ink-1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    margin-top: 2px;
+    font-size: @fs-xs;
+    color: @ink-3;
+  }
+}
+
+// ------------------------------------------------------------
+// 12. 标签
+// ------------------------------------------------------------
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: @fs-xs;
+  color: @ink-2;
+  background: @surface-2;
+  border: 1px solid @border;
+  border-radius: @radius-pill;
+
+  &--accent {
+    color: @accent;
+    background: @accent-soft;
+    border-color: transparent;
+  }
+}
+
+// ------------------------------------------------------------
+// 13. 空状态
+// ------------------------------------------------------------
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: @sp-8 @sp-4;
+  text-align: center;
+  color: @ink-3;
+
+  &__title {
+    margin-top: @sp-3;
+    font-size: @fs-base;
+    color: @ink-2;
+  }
+
+  &__desc {
+    margin-top: @sp-1;
+    font-size: @fs-sm;
+    color: @ink-3;
+  }
+}
+
+// ------------------------------------------------------------
+// 14. 分割线 / 加载
+// ------------------------------------------------------------
+.divider {
+  height: 1px;
+  background: @border;
+  border: 0;
+  margin: @sp-5 0;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, @surface-2 25%, darken(@surface-2, 3%) 37%, @surface-2 63%);
+  background-size: 400% 100%;
+  animation: skeleton 1.4s ease infinite;
+  border-radius: @radius-sm;
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+// ------------------------------------------------------------
+// 15. 布局工具类（Flex / Grid）
+// ------------------------------------------------------------
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-1 {
+  gap: @sp-1;
+}
+
+.gap-2 {
+  gap: @sp-2;
+}
+
+.gap-3 {
+  gap: @sp-3;
+}
+
+.gap-4 {
+  gap: @sp-4;
+}
+
+.gap-5 {
+  gap: @sp-5;
+}
+
+// ------------------------------------------------------------
+// 16. 间距工具类
+// ------------------------------------------------------------
+.mt-1 {
+  margin-top: @sp-1;
+}
+
+.mt-2 {
+  margin-top: @sp-2;
+}
+
+.mt-3 {
+  margin-top: @sp-3;
+}
+
+.mt-4 {
+  margin-top: @sp-4;
+}
+
+.mt-5 {
+  margin-top: @sp-5;
+}
+
+.mt-6 {
+  margin-top: @sp-6;
+}
+
+.mb-1 {
+  margin-bottom: @sp-1;
+}
+
+.mb-2 {
+  margin-bottom: @sp-2;
+}
+
+.mb-3 {
+  margin-bottom: @sp-3;
+}
+
+.mb-4 {
+  margin-bottom: @sp-4;
+}
+
+.mb-5 {
+  margin-bottom: @sp-5;
+}
+
+.ml-2 {
+  margin-left: @sp-2;
+}
+
+.mr-2 {
+  margin-right: @sp-2;
+}
+
+.pt-4 {
+  padding-top: @sp-4;
+}
+
+.pb-4 {
+  padding-bottom: @sp-4;
+}
+
+.py-4 {
+  padding-top: @sp-4;
+  padding-bottom: @sp-4;
+}
+
+.px-4 {
+  padding-left: @sp-4;
+  padding-right: @sp-4;
+}
+
+// ------------------------------------------------------------
+// 17. 通用视觉
+// ------------------------------------------------------------
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.line-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
