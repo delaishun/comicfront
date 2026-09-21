@@ -139,9 +139,20 @@ async function decodeBitmap(blob: Blob): Promise<ImageBitmap> {
  * ES 模块本身就有缓存，不需要手动缓存 Promise。
  */
 async function loadHeic2any(): Promise<any> {
-  const mod: any = await import('~/utils/heic2any.js')
+  // const mod: any = await import('~/utils/heic2any.js')
   // 兼容 default 导出 / 命名导出 / 命名空间对象
-  return mod?.default?.heic2any || mod?.default || mod?.heic2any || mod
+  // return mod?.default?.heic2any || mod?.default || mod?.heic2any || mod
+
+  // HEIC 转换只在浏览器里跑，SSR 阶段直接拒绝
+  if (import.meta.server) {
+    throw new ImageProcessError(
+      'HEIC_FAILED',
+      'HEIC 转换仅支持浏览器环境',
+    )
+  }
+
+  const mod: any = await import('heic2any')
+  return mod?.default || mod
 }
 
 /**
