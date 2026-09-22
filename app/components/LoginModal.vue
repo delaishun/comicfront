@@ -186,8 +186,8 @@ watch(visible, (v) => {
         <p class="auth__subtitle">
           {{
             mode === 'login'
-              ? '登录你的 Inkwell 账号'
-              : '注册一个新的 Inkwell 账号'
+              ? '登录你的 61Comic 账号'
+              : '注册一个新的 61Comic 账号'
           }}
         </p>
       </header>

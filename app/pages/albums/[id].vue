@@ -611,7 +611,7 @@ async function submitAlbumEdit() {
 }
 
 useHead(() => ({
-  title: album.value ? `${album.value.title} · Inkwell` : 'Album · Inkwell',
+  title: album.value ? `${album.value.title} · 61Comic` : 'Album · 61Comic',
 }))
 </script>
 

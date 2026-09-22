@@ -259,8 +259,8 @@ async function handleLogout() {
 
 useHead(() => ({
   title: user.value
-    ? `${user.value.displayName || user.value.handle} · Inkwell`
-    : 'User · Inkwell',
+    ? `${user.value.displayName || user.value.handle} · 61Comic`
+    : 'User · 61Comic',
 }))
 </script>
 
